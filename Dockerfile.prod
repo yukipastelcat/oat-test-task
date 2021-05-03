@@ -1,0 +1,17 @@
+FROM node:lts-buster-slim as deps
+WORKDIR /app
+
+COPY ./*.json ./webpack.config.js ./webpack.config.prod.js .babelrc ./
+COPY ./src ./src
+
+RUN npm ci
+RUN npm run build
+
+FROM node:lts-buster-slim as prod
+WORKDIR /app
+
+COPY --from=deps /app/dist build
+
+EXPOSE 5000
+
+CMD ["npx", "serve", "-s", "build"]
