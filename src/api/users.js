@@ -21,4 +21,10 @@ export const getUsers = async (limit, offset, name) => {
  * @see https://hr.oat.taocloud.org/api/#/user/get_user__userId_
  */
 export async function getUser (userId) {
+  const { data } = await apiClient({
+    method: 'get',
+    url: `user/${userId}`
+  })
+
+  return data
 }

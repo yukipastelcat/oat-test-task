@@ -11,7 +11,7 @@ export default class FiltersComponent extends Component {
   }
 
   render () {
-    const searchInput = h('input', {
+    const searchInput = h('input.border-2.border-blue-600.rounded-md.ml-2', {
       on: {
         input: this.props.onChange
       }

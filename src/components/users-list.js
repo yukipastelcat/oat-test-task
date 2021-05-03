@@ -4,6 +4,8 @@ import {
 import Component from '../core/component'
 import ListComponent from './list'
 import FiltersComponent from './filters'
+import UserCard from './user-card'
+import ModalComponent from './modal'
 import { getUsers } from '../api/users'
 
 export default class UsersList extends Component {
@@ -23,51 +25,7 @@ export default class UsersList extends Component {
     this.fetchUsers()
   }
 
-  render () {
-    const filters = new FiltersComponent({
-      onChange: (evt) => {
-        this.query = evt.target.value
-        this.usersState.items = []
-        this.offset = 0
-        this.fetchUsers()
-      }
-    }).render()
-    const list = new ListComponent(
-      {
-        items: this.usersState.items,
-      },
-      {
-        listItem: (item) => h(
-          'span',
-          [item.lastName, item.firstName]
-            .filter(item => !!item)
-            .map(this.capitalize)
-            .join(' ')
-        )
-      }
-    ).render()
-    const showMoreBtn = h('button', {
-      on: {
-        click: () => {
-          this.offset += this.limit
-          this.fetchUsers()
-        }
-      }
-    }, 'Load more')
-
-    return h('div', [
-      h('h1', 'Users list'),
-      filters,
-      list,
-      this.showMoreBtn ? showMoreBtn : null
-    ])
-  }
-
-  capitalize (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
-  async fetchUsers (query) {
+  async fetchUsers () {
     let result = []
 
     this.usersState.pending = true
@@ -85,5 +43,92 @@ export default class UsersList extends Component {
     }
 
     this.usersState.items = [...this.usersState.items, ...result]
+  }
+
+  capitalize (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  createUserModal (userId) {
+    const root = document.createElement('div')
+    document.body.appendChild(root)
+    const modal = new ModalComponent({
+      onClose: () => {
+        modal.root.elm.remove()
+      },
+    }, {
+      default: () => h('div', {
+        hook: {
+          insert: (vnode) => {
+            new UserCard({
+              id: userId
+            }).mount(vnode.elm)
+          }
+        }
+      })
+    })
+    modal.mount(root)
+  }
+
+  render () {
+    const filters = new FiltersComponent({
+      onChange: (evt) => {
+        this.query = evt.target.value
+        this.usersState.items = []
+        this.offset = 0
+        this.fetchUsers()
+      }
+    }).render()
+    const list = new ListComponent(
+      {
+        items: this.usersState.items,
+        loading: this.usersState.pending
+      },
+      {
+        listItem: (item) => h(
+          'button',
+          {
+            on: {
+              click: () => {
+                this.createUserModal(item.userId)
+              }
+            }
+          },
+          [item.lastName, item.firstName]
+            .filter(item => !!item)
+            .map(this.capitalize)
+            .join(' ')
+        ),
+        emptyList: () => h(
+          'div',
+          'No elements found. Consider changing the search query.'
+        )
+      }
+    ).render()
+    const showMoreBtn = h(
+      'button.bg-blue-500.text-white.p-3.rounded-md.mt-4',
+      {
+        class: {
+          'opacity-50': this.usersState.pending
+        },
+        attrs: {
+          disabled: this.usersState.pending
+        },
+        on: {
+          click: () => {
+            this.offset += this.limit
+            this.fetchUsers()
+          }
+        }
+      },
+      'Load more'
+    )
+
+    return h('div.container.mx-auto', [
+      h('h1.text-5xl.leading-relaxed', 'Users list'),
+      filters,
+      h('div.mt-2', list),
+      this.showMoreBtn ? showMoreBtn : null
+    ])
   }
 }
