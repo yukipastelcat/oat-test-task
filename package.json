@@ -1,0 +1,33 @@
+{
+  "name": "oat-test-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --open --hot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yukipastelcat/oat-test-task.git"
+  },
+  "author": "Kirill Sedunov <kirill.sedunov@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yukipastelcat/oat-test-task/issues"
+  },
+  "homepage": "https://github.com/yukipastelcat/oat-test-task#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.0",
+    "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^8.1.1",
+    "eslint": "^7.25.0",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
