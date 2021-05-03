@@ -1,6 +1,6 @@
 import 'core-js/es7'
 import 'regenerator-runtime/runtime'
-import App from '../src/components/app'
+import UsersList from './components/users-list'
 
-const app = new App()
+const app = new UsersList()
 app.mount(document.querySelector('#app'))
