@@ -19,11 +19,11 @@
   },
   "homepage": "https://github.com/yukipastelcat/oat-test-task#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
     "axios": "^0.21.1",
     "core-js": "^2.6.12",
     "regenerator-runtime": "^0.13.7",
-    "snabbdom": "^3.0.1"
+    "snabbdom": "^3.0.1",
+    "toastify-js": "^1.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

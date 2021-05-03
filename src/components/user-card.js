@@ -3,6 +3,7 @@ import {
 } from 'snabbdom'
 import { getUser } from '../api/users'
 import Component from '../core/component'
+import Toastify from 'toastify-js'
 
 export default class UserCard extends Component {
   constructor (
@@ -25,7 +26,11 @@ export default class UserCard extends Component {
     try {
       this.userState.user = await getUser(this.props.id)
     } catch (error) {
-      // TODO: handle error
+      Toastify({
+        text: 'Couldn\'t fetch users',
+        backgroundColor: 'rgba(239,68,68)',
+        className: 'text-white'
+      }).showToast()
     } finally {
       this.userState.pending = false
     }

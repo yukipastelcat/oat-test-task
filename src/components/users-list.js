@@ -6,6 +6,7 @@ import ListComponent from './list'
 import FiltersComponent from './filters'
 import UserCard from './user-card'
 import ModalComponent from './modal'
+import Toastify from 'toastify-js'
 import { getUsers } from '../api/users'
 
 export default class UsersList extends Component {
@@ -37,7 +38,11 @@ export default class UsersList extends Component {
         this.showMoreBtn = true
       }
     } catch (error) {
-      // TODO: handle error
+      Toastify({
+        text: 'Couldn\'t fetch users',
+        backgroundColor: 'rgba(239,68,68)',
+        className: 'text-white'
+      }).showToast()
     } finally {
       this.usersState.pending = false
     }
@@ -52,21 +57,24 @@ export default class UsersList extends Component {
   createUserModal (userId) {
     const root = document.createElement('div')
     document.body.appendChild(root)
-    const modal = new ModalComponent({
-      onClose: () => {
-        modal.root.elm.remove()
+    const modal = new ModalComponent(
+      {
+        onClose: () => {
+          modal.root.elm.remove()
+        },
       },
-    }, {
-      default: () => h('div', {
-        hook: {
-          insert: (vnode) => {
-            new UserCard({
-              id: userId
-            }).mount(vnode.elm)
+      {
+        default: () => h('div', {
+          hook: {
+            insert: (vnode) => {
+              new UserCard({
+                id: userId
+              }).mount(vnode.elm)
+            }
           }
-        }
-      })
-    })
+        })
+      }
+    )
     modal.mount(root)
   }
 
