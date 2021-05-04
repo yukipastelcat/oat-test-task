@@ -12,6 +12,6 @@ WORKDIR /app
 
 COPY --from=deps /app/dist build
 
-EXPOSE 5000
+EXPOSE 8080
 
-CMD ["npx", "serve", "-s", "build"]
+CMD ["npx", "http-server", "build"]
